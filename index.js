@@ -8,14 +8,7 @@ const pool = require('./sql/connection');
 
 const PORT = process.env.PORT || 4000;
 
-// const port = process.env.DB_PORT || 4000;
 
-// const port = 4000;
-
-// const finishTime = new Date().toLocaleString('en-US', { timeZone: 'America/Chicago' });
-
-// const centralTime = new Date(finishTime);
-// const formattedTime = `${centralTime.getFullYear()}-${String(centralTime.getMonth() + 1).padStart(2, '0')}-${String(centralTime.getDate()).padStart(2, '0')} ${String(centralTime.getHours()).padStart(2, '0')}:${String(centralTime.getMinutes()).padStart(2, '0')}:${String(centralTime.getSeconds()).padStart(2, '0')}`;
 
 app.use(express.json());
 
@@ -44,6 +37,17 @@ app.get('/schedules', (req, res) => {
   });
 });
 
+// to show a users' schedule:
+
+app.get('/schedules:/id', (req, res) => {
+  pool.query(`SELECT * FROM schedules WHERE schedules_user_id = ${id}`, function(err, rows, fields) {
+    console.log(rows)
+    res.json(rows)
+  });
+});
+
+
+
 app.get('/users/:id', (req, res) => {
   const { id } = req. params;
   pool.query(
@@ -54,15 +58,7 @@ app.get('/users/:id', (req, res) => {
   );
 });
 
-// app.get('/users/sessions/:id', (req, res) => {
-//   const { id } = req. params;
-//   pool.query(
-//     `SELECT * FROM sessions WHERE user_id = ${id}`,
-//     function (err, rows, fields) {
-//       res.json(rows);
-//     }
-//   );
-// });
+//to show a users' sessions
 
 app.get('/sessions/:id', (req, res) => {
   const { id } = req.params;
